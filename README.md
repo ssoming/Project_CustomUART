@@ -12,9 +12,9 @@
 |------|------|
 | 플랫폼 | Basys3 (Xilinx Artix-7 FPGA) |
 | 언어 | Verilog, C |
-| 도구 | Vivado, Vitis |
+| 도구 | Vivado, Vitis, VsCode |
 | 통신 | UART (9600 bps), AXI4-Lite, SPI |
-| 개발 기간 | 2025.04 |
+| 개발 기간 | 2025.04.13-21 |
 | 팀 구성 | 3인 팀 프로젝트 |
 
 ---
