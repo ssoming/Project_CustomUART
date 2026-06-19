@@ -5,7 +5,7 @@
 <!--
 [![Notion](https://img.shields.io/badge/Notion-프로젝트%20상세%20보기-000000?style=for-the-badge&logo=notion&logoColor=white)](https://app.notion.com/p/minseokim-profile/Custom-UART-IP-359b5d65c68c8019a60ed422ddd7c67e?source=copy_link)
 -->
-[![YouTube](https://img.shields.io/badge/YOUTUBE-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%98%81%EC%83%81%20%EB%B3%B4%EA%B8%B0-555555?style=for-the-badge&logo=youtube&logoColor=white&labelColor=FF0000)](https://youtu.be/9eZLGfQ_p1I?si=UU9I7e6ytvO0aUbN)
+[![YouTube](https://img.shields.io/badge/YOUTUBE-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%98%81%EC%83%81%20%EB%B3%B4%EA%B8%B0-555555?style=for-the-badge&logo=youtube&logoColor=white&labelColor=FF0000)](https://youtube.com/shorts/AjUsJadkgzk)
 
 ---
 
@@ -17,7 +17,7 @@
 | 언어 | Verilog, C |
 | 도구 | Vivado, Vitis |
 | 통신 | UART (9600 bps), AXI4-Lite, SPI |
-| 개발 기간 | 2026.05.14 - 05.20 |
+| 개발 기간 | 2026.04.13 - 05.21 |
 | 팀 구성 | 3인 팀 프로젝트 |
 
 ---
@@ -49,7 +49,7 @@
 
 ### 핵심 구현
 
-![block_diagram](uart_block_diagram.png)
+![block_diagram](CustomUartDotmatrix_Blockdiagram.png)
 
 | 구현 | 설명 |
 |---|---|
