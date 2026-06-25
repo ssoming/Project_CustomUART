@@ -5,7 +5,7 @@
 <!--
 [![Notion](https://img.shields.io/badge/Notion-프로젝트%20상세%20보기-000000?style=for-the-badge&logo=notion&logoColor=white)](https://app.notion.com/p/minseokim-profile/Custom-UART-IP-359b5d65c68c8019a60ed422ddd7c67e?source=copy_link)
 -->
-[![YouTube](https://img.shields.io/badge/YOUTUBE-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%98%81%EC%83%81%20%EB%B3%B4%EA%B8%B0-555555?style=for-the-badge&logo=youtube&logoColor=white&labelColor=FF0000)](https://youtube.com/shorts/AjUsJadkgzk)
+[![YouTube](https://img.shields.io/badge/YOUTUBE-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%98%81%EC%83%81%20%EB%B3%B4%EA%B8%B0-555555?style=for-the-badge&logo=youtube&logoColor=white&labelColor=FF0000)](https://www.youtube.com/shorts/AjUsJadkgzk)
 
 ---
 
@@ -17,7 +17,7 @@
 | 언어 | Verilog, C |
 | 도구 | Vivado, Vitis |
 | 통신 | UART (9600 bps), AXI4-Lite, SPI |
-| 개발 기간 | 2026.04.13 - 05.21 |
+| 개발 기간 | 2025.04 |
 | 팀 구성 | 3인 팀 프로젝트 |
 
 ---
@@ -38,7 +38,7 @@
   Baud 주기 중앙 샘플링으로 비트를 복원하고, false start noise 무시 및 Stop bit 기반 프레임 오류 감지 로직 구현
 
 - **RX 시뮬레이션 검증 (rx_tb.v)**  
-  정상 수신(Normal receive, Back-to-back)과 오류 처리(Frame error, False start) 케이스를 독립 테스트벤치로 분리하여 4가지 조건 검증
+  정상 수신과 오류 처리 케이스를 독립 테스트벤치로 분리하여 4가지 조건 검증
 
 - **Vitis 펌웨어 — 문자 분류 및 MAX7219 SPI 드라이버 구현**  
   수신 ASCII 코드를 숫자 / 대문자 / 소문자로 분기하여 Char Pattern 배열을 O(1) 인덱싱 후 행 단위 SPI 전송
@@ -47,15 +47,23 @@
 
 ## 4. 시스템 아키텍처 및 핵심 구현
 
-### 핵심 구현
+### Block Diagram
 
 ![block_diagram](CustomUartDotmatrix_Blockdiagram.png)
 
-| 구현 | 설명 |
-|---|---|
-| **① RX Core 중앙 샘플링** | Start bit 감지 후 Baud 주기 절반 지점에서 rx 재확인 → false start noise 무시, Stop bit ≠ High 시 `rx_error` 플래그 출력 |
-| **② 문자 분류 및 패턴 출력** | 수신 ASCII 코드를 0~9 / A~Z / a~z 범위로 분기, Char Pattern 배열 O(1) 인덱싱 후 MAX7219에 행 단위 SPI 전송 |
-| **③ RX 테스트벤치 분리 설계** | 정상 수신과 오류 케이스를 독립 테스트벤치로 분리하여 스테이트 머신 잔류 상태 간섭 없이 각각 검증 |
+### 핵심 구현
+
+**① RX Core — Baud 중앙 샘플링 및 노이즈 무시**
+
+Start bit 감지 직후 Baud 주기 절반 지점에서 rx 신호를 재확인한다. 이 시점에 rx가 다시 High라면 노이즈로 판단하고 IDLE로 복귀, Low라면 유효한 Start bit로 처리한다. DATA 구간에서는 각 비트의 중앙을 노려 샘플링하여 노이즈 마진을 최대화했다.
+
+**② RX Core — 프레임 오류 감지**
+
+STOP 상태에서 수신된 rx 값이 High가 아닌 경우 `rx_error` 플래그를 1클럭 펄스로 출력한다. 정상 수신(`rx_done`)과 오류 감지(`rx_error`)를 분리된 신호로 설계하여 상위 로직에서 독립적으로 처리할 수 있도록 구현했다.
+
+**③ Vitis 펌웨어 — ASCII 기반 패턴 인덱싱 및 SPI 출력**
+
+수신 데이터의 ASCII 값을 범위 비교로 분기하여 `digit_patterns[data - '0']` 방식의 오프셋 연산으로 패턴 배열을 O(1) 조회한다. 조회한 8행 데이터를 MAX7219 레지스터 주소(1~8)에 맞춰 SPI로 순차 전송한다.
 
 ---
 
